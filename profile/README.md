@@ -102,8 +102,8 @@ yet — clone the repo, `pnpm install --frozen-lockfile && pnpm build`, and run 
 
 - **[lattice](https://github.com/apatureai/lattice)** — `pnpm capture https://example.com`
   turns a page into a sealed, content-addressed scene graph plus four budgeted prompt views.
-  `@apature/ui-graph` is the pure graph library (JSON in, JSON out, no browser) and
-  `@apature/ui-graph-capture` is the Playwright/CDP producer — workspace packages you build
+  `@apatureai/lattice` is the pure graph library (JSON in, JSON out, no browser) and
+  `@apatureai/lattice-capture` is the Playwright/CDP producer — workspace packages you build
   and consume from the repo.
 - **[canon](https://github.com/apatureai/canon)** — `pnpm ui-dna tokens your-tokens.json` resolves a
   DTCG token file under the strict 2025.10 profile and names exactly which tokens resolve, which
