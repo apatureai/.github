@@ -18,7 +18,7 @@ behind it is labeled unjudged, never shown as a green pass.
 | [gate](https://github.com/apatureai/gate) | The GitHub surface: an Action and an App. Runs a PR's preview build inside a hardened sandbox supervisor, hands the verified preview URL to a critique service over an HTTP contract, and publishes the review as one sticky comment plus a Check Run. Fails closed and never reds a PR on its own errors. |
 | [bastion](https://github.com/apatureai/bastion) | A remote MCP server for in-loop review. A coding agent submits a preview URL, gets structured findings (route, viewport, element ref, suggested fix), applies fixes itself, then asks for a recheck. Also a worked reference for OAuth 2.1 resource-server auth, SSRF-safe URL handling, and long-running jobs over MCP. |
 | [lattice](https://github.com/apatureai/lattice) | A scene graph for browser agents. Fuses DOM/layout, accessibility tree, computed style, and text-run evidence into one immutable content-addressed graph — retaining source disagreements instead of picking a winner — then renders small budgeted text views for a model prompt. |
-| [canon](https://github.com/apatureai/canon) | A strict DTCG 2025.10 design-token resolver and a scanner that reads a project's declared design system out of its own files (CSS custom properties, Tailwind v3/v4, DTCG and Style Dictionary files). Abstains and explains instead of guessing; emits deterministic, content-addressed snapshots. Published as `@uidna/*` / CLI `ui-dna`. |
+| [canon](https://github.com/apatureai/canon) | A strict DTCG 2025.10 design-token resolver and a scanner that reads a project's declared design system out of its own files (CSS custom properties, Tailwind v3/v4, DTCG and Style Dictionary files). Abstains and explains instead of guessing; emits deterministic, content-addressed snapshots. Builds the `ui-dna` CLI from a source checkout; npm publication is planned but nothing is on npm yet. |
 | [sigil](https://github.com/apatureai/sigil) | Error bars for LLM-as-judge evals: calibration against human labels, finite-sample conformal risk certificates for abstention thresholds, anytime-valid drift monitoring, and paired significance tests for model-switch claims. Dependency-free, byte-reproducible reports. |
 
 ## How they compose
@@ -52,6 +52,8 @@ git clone https://github.com/apatureai/verdict.git && cd verdict
 pnpm install --frozen-lockfile && pnpm browser:install && pnpm build
 export ENGINE_HMAC_SECRET="$(openssl rand -hex 32)"
 node packages/serve/dist/main.js --port 8791 --model mock   # add MODEL_BASE_URL/MODEL_API_KEY for real judgments
+# up? curl http://127.0.0.1:8791/readyz — /livez and /readyz are the only unsigned routes;
+# every /jobs request must be HMAC-signed with ENGINE_HMAC_SECRET, so a bare curl there gets 401
 
 # terminal 2: gate against it
 git clone https://github.com/apatureai/gate.git && cd gate
@@ -94,13 +96,16 @@ replayed fixture from the payload alone.
 
 ### c) The libraries (lattice, canon, sigil)
 
-Each is useful on its own, with no other Apature component involved:
+Each is useful on its own, with no other Apature component involved. None of them is on npm
+yet — clone the repo, `pnpm install --frozen-lockfile && pnpm build`, and run from the checkout
+(npm publication is planned):
 
 - **[lattice](https://github.com/apatureai/lattice)** — `pnpm capture https://example.com`
   turns a page into a sealed, content-addressed scene graph plus four budgeted prompt views.
-  `@apature/ui-graph` is the pure graph library (JSON in, JSON out, no browser);
-  `@apature/ui-graph-capture` is the Playwright/CDP producer.
-- **[canon](https://github.com/apatureai/canon)** — `ui-dna tokens your-tokens.json` resolves a
+  `@apature/ui-graph` is the pure graph library (JSON in, JSON out, no browser) and
+  `@apature/ui-graph-capture` is the Playwright/CDP producer — workspace packages you build
+  and consume from the repo.
+- **[canon](https://github.com/apatureai/canon)** — `pnpm ui-dna tokens your-tokens.json` resolves a
   DTCG token file under the strict 2025.10 profile and names exactly which tokens resolve, which
   are refused, and why; pointing it at a project directory yields a deterministic design-system
   snapshot with per-field confidence and provenance.
