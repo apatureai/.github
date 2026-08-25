@@ -18,7 +18,7 @@ behind it is labeled unjudged, never shown as a green pass.
 | [gate](https://github.com/apatureai/gate) | The GitHub surface: an Action and an App. Runs a PR's preview build inside a hardened sandbox supervisor, hands the verified preview URL to a critique service over an HTTP contract, and publishes the review as one sticky comment plus a Check Run. Fails closed and never reds a PR on its own errors. |
 | [bastion](https://github.com/apatureai/bastion) | A remote MCP server for in-loop review. A coding agent submits a preview URL, gets structured findings (route, viewport, element ref, suggested fix), applies fixes itself, then asks for a recheck. Also a worked reference for OAuth 2.1 resource-server auth, SSRF-safe URL handling, and long-running jobs over MCP. |
 | [lattice](https://github.com/apatureai/lattice) | A scene graph for browser agents. Fuses DOM/layout, accessibility tree, computed style, and text-run evidence into one immutable content-addressed graph — retaining source disagreements instead of picking a winner — then renders small budgeted text views for a model prompt. |
-| [canon](https://github.com/apatureai/canon) | A strict DTCG 2025.10 design-token resolver and a scanner that reads a project's declared design system out of its own files (CSS custom properties, Tailwind v3/v4, DTCG and Style Dictionary files). Abstains and explains instead of guessing; emits deterministic, content-addressed snapshots. Builds the `ui-dna` CLI from a source checkout; npm publication is planned but nothing is on npm yet. |
+| [canon](https://github.com/apatureai/canon) | A strict DTCG 2025.10 design-token resolver and a scanner that reads a project's declared design system out of its own files (CSS custom properties, Tailwind v3/v4, DTCG and Style Dictionary files). Abstains and explains instead of guessing; emits deterministic, content-addressed snapshots. Published as `@apatureai/canon` on npm; the CLI binary is still `ui-dna`. |
 | [sigil](https://github.com/apatureai/sigil) | Error bars for LLM-as-judge evals: calibration against human labels, finite-sample conformal risk certificates for abstention thresholds, anytime-valid drift monitoring, and paired significance tests for model-switch claims. Dependency-free, byte-reproducible reports. |
 
 ## How they compose
@@ -96,9 +96,9 @@ replayed fixture from the payload alone.
 
 ### c) The libraries (lattice, canon, sigil)
 
-Each is useful on its own, with no other Apature component involved. None of them is on npm
-yet — clone the repo, `pnpm install --frozen-lockfile && pnpm build`, and run from the checkout
-(npm publication is planned):
+Each is useful on its own, with no other Apature component involved. All three are published on
+npm under the `@apatureai/*` scope; the demos below run from a checkout — clone the repo,
+`pnpm install --frozen-lockfile && pnpm build`, and run from there:
 
 - **[lattice](https://github.com/apatureai/lattice)** — `pnpm capture https://example.com`
   turns a page into a sealed, content-addressed scene graph plus four budgeted prompt views.
